@@ -19,6 +19,16 @@ const swaggerDocument = {
         responses: { '201': { description: 'Tour creado' } },
       },
     },
+    '/api/v1/customers': {
+      get: {
+        summary: 'Listar clientes (contactos)',
+        responses: { '200': { description: 'Lista de clientes' } },
+      },
+      post: {
+        summary: 'Guardar contacto (nombre, teléfono y correo requeridos)',
+        responses: { '201': { description: 'Contacto guardado' } },
+      },
+    },
   },
 }
 

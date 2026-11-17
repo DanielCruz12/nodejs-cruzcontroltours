@@ -39,5 +39,9 @@ npm run dev           # http://localhost:3002
 | PUT    | /api/v1/tours/:id |
 | DELETE | /api/v1/tours/:id |
 | POST   | /api/v1/uploads   |
+| POST   | /api/v1/customers |
+| GET    | /api/v1/customers |
+| GET    | /api/v1/customers/:id |
+| DELETE | /api/v1/customers/:id |
 
 Docs Swagger: `/api/docs` · Socket.IO: `/socket.io`
