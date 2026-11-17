@@ -1,0 +1,13 @@
+node_modules
+.env
+dist
+.eslintcache
+coverage
+
+# misc
+.DS_Store
+.pem
+
+# Firebase (claves privadas, no subir a repo)
+serviceAccountKey.json
+*-firebase-adminsdk-*.json
