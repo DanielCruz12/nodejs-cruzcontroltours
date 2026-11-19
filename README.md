@@ -24,9 +24,9 @@ src/
 ```powershell
 Copy-Item .env.example .env
 npm install
-npm run db:generate   # genera la migración
-npm run db:migrate    # la aplica
-npm run dev           # http://localhost:3002
+npm run dz:gen    # genera la migración
+npm run dz:mig    # la aplica
+npm run dev       # http://localhost:3002
 ```
 
 ## Endpoints

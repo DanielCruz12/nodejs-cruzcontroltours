@@ -10,17 +10,28 @@ const idParams = z.object({
 })
 
 const tourSchema = z.object({
-  title: z.string().trim().min(1, 'title requerido'),
+  title: z.string().trim().min(1, 'Title is required'),
   description: z.string().optional(),
-  price: z.union([z.number().positive(), z.string().min(1)]),
+  price: z.union([
+    z.number().positive('Price must be positive'),
+    z
+      .string()
+      .trim()
+      .regex(/^\d+(\.\d{1,2})?$/, 'Invalid price')
+      .refine((value) => Number(value) > 0, 'Price must be positive'),
+  ]),
   durationDays: z.coerce.number().int().min(1).optional(),
   active: z.boolean().optional(),
+  categoryId: z.coerce.number().int().min(1).nullish(),
+  images: z.array(z.string().trim().min(1)).optional(),
+  videos: z.array(z.string().trim().min(1)).optional(),
+  reviewCriteria: z.array(z.string().trim().min(1)).optional(),
 })
 
 router.get('/tours', tourController.list)
 router.get('/tours/:id', validateParams(idParams), tourController.getById)
 
-// TODO: agregar auth (roles) a las rutas de escritura cuando se defina.
+// TODO: add auth (roles) to write routes once defined.
 router.post('/tours', validateBody(tourSchema), tourController.create)
 router.put(
   '/tours/:id',

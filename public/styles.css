@@ -1,0 +1,223 @@
+:root {
+  --bg: #eef3f1;
+  --surface: #ffffff;
+  --ink: #1a2b2a;
+  --muted: #47605e;
+  --line: #d7e0dd;
+  --accent: #0b6e5d;
+  --bar: #c4e6cd;
+  --bar-ink: #14342a;
+  --bar-muted: #3f6156;
+  --ok: #15803d;
+  --warn: #b45309;
+  --bad: #b91c1c;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+.wrap {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 0 20px;
+  padding-top: 20px;
+  padding-bottom: 40px;
+}
+
+/* Barra superior */
+.topbar {
+  background: var(--bar);
+  color: var(--bar-ink);
+  border-bottom: 1px solid #a8d4b4;
+}
+
+.topbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-logo {
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  background: #ffffff;
+}
+
+.brand-name {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 20px;
+  letter-spacing: 0.2px;
+}
+
+.brand-sub {
+  margin: 0;
+  font-size: 13px;
+  color: var(--bar-muted);
+}
+
+.live-pill {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  background: #ffffff;
+  border: 1px solid #9cc9a8;
+  border-radius: 999px;
+  padding: 7px 16px 7px 13px;
+  font-size: 14px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #8a9a97;
+}
+
+.dot.ok {
+  background: #16a34a;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.dot.warn {
+  background: #fbbf24;
+}
+
+.dot.bad {
+  background: #f87171;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dot.ok {
+    animation: none;
+  }
+}
+
+/* Contenido */
+main {
+  padding-bottom: 32px;
+}
+
+.intro {
+  padding: 0px 0 6px;
+}
+
+.intro h1 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 34px;
+  line-height: 1.2;
+  margin: 0 0 8px;
+}
+
+.intro p {
+  margin: 0 0 6px;
+  color: var(--muted);
+}
+
+.meta {
+  font-size: 14px;
+}
+
+section {
+  margin-top: 26px;
+}
+
+h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 22px;
+  margin: 0 0 12px;
+}
+
+code {
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.88em;
+  background: #e4ebe8;
+  border-radius: 4px;
+  padding: 1px 6px;
+}
+
+.topbar code,
+footer code {
+  background: rgba(20, 52, 42, 0.1);
+}
+
+/* Lista de estado */
+.status-list {
+  margin: 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 13px 18px;
+}
+
+.status-row + .status-row {
+  border-top: 1px solid var(--line);
+}
+
+.status-row dt {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.status-row dd {
+  margin: 0;
+  font-weight: 600;
+  text-align: right;
+}
+
+.status-row dd.ok {
+  color: var(--ok);
+}
+
+.status-row dd.warn {
+  color: var(--warn);
+}
+
+.status-row dd.bad {
+  color: var(--bad);
+}
+
+footer {
+  background: var(--bar);
+  color: var(--bar-muted);
+  font-size: 14px;
+  padding: 16px 0;
+  border-top: 1px solid #a8d4b4;
+}
+
+footer p {
+  margin: 0;
+}

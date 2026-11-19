@@ -6,6 +6,7 @@ import rateLimit from 'express-rate-limit'
 import helmet from 'helmet'
 import hpp from 'hpp'
 import path from 'path'
+import { pool } from './db'
 import { apiRoutes } from './routes/v1'
 import { setupSwagger } from './swagger'
 
@@ -90,6 +91,26 @@ app.use(
 )
 
 setupSwagger(app)
+
+//* Salud del servicio (lo consume la página de estado de /)
+const startedAt = Date.now()
+
+app.get('/health', async (_req, res) => {
+  let database = 'up'
+  try {
+    await pool.query('SELECT 1')
+  } catch {
+    database = 'down'
+  }
+  res.json({
+    status: database === 'up' ? 'ok' : 'degraded',
+    database,
+    uptime: Math.floor((Date.now() - startedAt) / 1000),
+    environment: process.env.NODE_ENV || 'development',
+    version: '1.0.0',
+    timestamp: new Date().toISOString(),
+  })
+})
 
 //* Define routes
 app.use('/api/v1', apiRoutes)

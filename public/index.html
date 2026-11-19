@@ -2,10 +2,71 @@
 <html lang="es">
   <head>
     <meta charset="utf-8" />
-    <title>Cruz Control Tours API</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cruz Control Tours · Estado del backend</title>
+    <link rel="icon" href="/logo.png" />
+    <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
-    <h1>Cruz Control Tours API</h1>
-    <p>Docs: <a href="/api/docs">/api/docs</a></p>
+    <header class="topbar">
+      <div class="wrap topbar-inner">
+        <div class="brand">
+          <img class="brand-logo" src="/logo.png" alt="Logo de Cruz Control Tours" width="46" height="46" />
+          <div>
+            <p class="brand-name">Cruz Control Tours</p>
+            <p class="brand-sub">API backend · puerto 3002</p>
+          </div>
+        </div>
+        <p class="live-pill" id="live-pill">
+          <span class="dot" id="live-dot" aria-hidden="true"></span>
+          <span id="live-text">Comprobando…</span>
+        </p>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <section class="intro">
+        <h2>Estado del servicio</h2>
+        <p>
+          El backend está corriendo. Esta página consulta
+          <code>/health</code> cada 15 segundos y muestra el estado en vivo.
+        </p>
+        <p class="meta">Última comprobación: <span id="last-check">—</span></p>
+      </section>
+
+      <section aria-labelledby="salud-titulo">
+        <dl class="status-list">
+          <div class="status-row">
+            <dt>Servidor</dt>
+            <dd id="st-server">—</dd>
+          </div>
+          <div class="status-row">
+            <dt>Base de datos</dt>
+            <dd id="st-db">—</dd>
+          </div>
+          <div class="status-row">
+            <dt>Tiempo activo</dt>
+            <dd id="st-uptime">—</dd>
+          </div>
+          <div class="status-row">
+            <dt>Entorno</dt>
+            <dd id="st-env">—</dd>
+          </div>
+          <div class="status-row">
+            <dt>Versión</dt>
+            <dd id="st-version">—</dd>
+          </div>
+        </dl>
+      </section>
+
+    </main>
+
+  <!--   <footer>
+      <div class="wrap">
+        <p>Cruz Control Tours · Base de la API: <code>/api/v1</code></p>
+      </div>
+    </footer>
+ -->
+    <script src="/status.js"></script>
   </body>
 </html>

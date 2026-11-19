@@ -1,10 +1,13 @@
-import { eq } from 'drizzle-orm'
+import { desc, eq } from 'drizzle-orm'
 import { db } from '../db'
 import { Customer, customers, NewCustomer } from '../db/schema'
 
 export const customerService = {
   async list(): Promise<Customer[]> {
-    return db.select().from(customers)
+    return db
+      .select()
+      .from(customers)
+      .orderBy(desc(customers.createdAt))
   },
 
   async getById(id: number): Promise<Customer | null> {
