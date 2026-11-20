@@ -103,12 +103,11 @@ export const userService = {
   async update(id: number, input: UpdateUserInput): Promise<PublicUser | null> {
     const target = await this.getById(id)
     if (!target) return null
-    // Los superadmin no rotan clave desde edición.
-    if (target.role === 'superadmin' && input.password) {
-      throw Object.assign(
-        new Error('No se puede cambiar la clave de un superadmin'),
-        { status: 400 },
-      )
+    // Un superadmin no se puede editar.
+    if (target.role === 'superadmin') {
+      throw Object.assign(new Error('No se puede editar un superadmin'), {
+        status: 400,
+      })
     }
     const patch: Partial<typeof users.$inferInsert> = {}
     if (input.name !== undefined) patch.name = input.name.trim()

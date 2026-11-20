@@ -47,7 +47,7 @@ Contexto acumulado del proyecto para continuar el trabajo sin volver a preguntar
 
 - `GET /customers` ordenado por fecha descendente (lo piden el panel y la bandeja `/mensajes` del front).
 - `POST /customers` y `POST /reviews` son públicos (los envían los clientes sin login); los GET siguen públicos (los usa el front). Todo lo demás que escribe (POST/PUT/DELETE, uploads) exige JWT de `admin` o `superadmin`.
-- Solo `superadmin` gestiona `/users` y ve `/roles`; ningún superadmin se puede borrar ni cambiar su clave desde edición.
+- Solo `superadmin` gestiona `/users` y ve `/roles`; ningún superadmin se puede editar ni borrar.
 - Seed idempotente (`npm run db:seed`): crea roles + `superadmin@`/`admin@`/`host@cruzcontroltours.com` (claves por defecto `SuperAdmin123!`/`Admin123!`/`Host123!`, sobreescribibles con `SEED_*_PASSWORD`). Tablas nuevas se aplican con `dz:push` (o `dz:gen` + `dz:mig`).
 - `DATABASE_URL` tiene prioridad sobre las partes `DB_*` (`src/db/index.ts`); SSL solo en producción.
 - Rate-limit global: 100 req / 15 min por IP en `/api`.
