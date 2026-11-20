@@ -1,9 +1,16 @@
-import { Router } from 'express'
+import { RequestHandler, Router } from 'express'
 import { z } from 'zod'
 import { tourController } from '../../controllers/tour-controller'
+import { authenticate, authorize } from '../../middlewares/auth'
 import { validateBody, validateParams } from '../../middlewares/validate'
 
 const router = Router()
+
+// Escritura solo para admin y superadmin (los GET siguen públicos).
+const canWrite: RequestHandler[] = [
+  authenticate,
+  authorize('superadmin', 'admin'),
+]
 
 const idParams = z.object({
   id: z.coerce.number().int().min(1),
@@ -31,14 +38,24 @@ const tourSchema = z.object({
 router.get('/tours', tourController.list)
 router.get('/tours/:id', validateParams(idParams), tourController.getById)
 
-// TODO: add auth (roles) to write routes once defined.
-router.post('/tours', validateBody(tourSchema), tourController.create)
+router.post(
+  '/tours',
+  ...canWrite,
+  validateBody(tourSchema),
+  tourController.create,
+)
 router.put(
   '/tours/:id',
+  ...canWrite,
   validateParams(idParams),
   validateBody(tourSchema),
   tourController.update,
 )
-router.delete('/tours/:id', validateParams(idParams), tourController.remove)
+router.delete(
+  '/tours/:id',
+  ...canWrite,
+  validateParams(idParams),
+  tourController.remove,
+)
 
 export default router

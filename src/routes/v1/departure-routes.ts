@@ -1,9 +1,16 @@
-import { Router } from 'express'
+import { RequestHandler, Router } from 'express'
 import { z } from 'zod'
 import { departureController } from '../../controllers/departure-controller'
+import { authenticate, authorize } from '../../middlewares/auth'
 import { validateBody, validateParams } from '../../middlewares/validate'
 
 const router = Router()
+
+// Escritura solo para admin y superadmin (los GET siguen públicos).
+const canWrite: RequestHandler[] = [
+  authenticate,
+  authorize('superadmin', 'admin'),
+]
 
 const idParams = z.object({
   id: z.coerce.number().int().min(1),
@@ -55,17 +62,20 @@ router.get(
 )
 router.post(
   '/departures',
+  ...canWrite,
   validateBody(departureSchema),
   departureController.create,
 )
 router.put(
   '/departures/:id',
+  ...canWrite,
   validateParams(idParams),
   validateBody(departureUpdateSchema),
   departureController.update,
 )
 router.delete(
   '/departures/:id',
+  ...canWrite,
   validateParams(idParams),
   departureController.remove,
 )

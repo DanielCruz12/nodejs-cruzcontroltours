@@ -1,9 +1,17 @@
-import { Router } from 'express'
+import { RequestHandler, Router } from 'express'
 import { z } from 'zod'
 import { customerController } from '../../controllers/customer-controller'
+import { authenticate, authorize } from '../../middlewares/auth'
 import { validateBody, validateParams } from '../../middlewares/validate'
 
 const router = Router()
+
+// Borrado solo para admin y superadmin. El POST es público (formulario
+// de contacto del front) y los GET siguen públicos (los usa el front).
+const canWrite: RequestHandler[] = [
+  authenticate,
+  authorize('superadmin', 'admin'),
+]
 
 const idParams = z.object({
   id: z.coerce.number().int().min(1),
@@ -17,8 +25,6 @@ export const customerSchema = z.object({
   mensaje: z.string().trim().max(2000).optional(),
 })
 
-// El formulario es público; lecturas y borrado deberían protegerse con auth.
-// TODO: agregar auth (roles) a GET y DELETE cuando se defina.
 router.post('/customers', validateBody(customerSchema), customerController.create)
 router.get('/customers', customerController.list)
 router.get(
@@ -28,6 +34,7 @@ router.get(
 )
 router.delete(
   '/customers/:id',
+  ...canWrite,
   validateParams(idParams),
   customerController.remove,
 )

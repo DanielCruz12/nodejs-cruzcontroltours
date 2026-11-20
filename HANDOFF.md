@@ -3,13 +3,14 @@
 Contexto acumulado del proyecto para continuar el trabajo sin volver a preguntar.
 **Actualiza este archivo al terminar cada sesión.**
 
-Última actualización: 2026-11-18
+Última actualización: 2026-11-19
 
 ## Stack
 
 - **Express 4 + TypeScript** (CommonJS), puerto **3002**, base `/api/v1`.
 - **Drizzle ORM + Postgres** (`pg`): esquema en `src/db/schema.ts`, migraciones en `drizzle/`.
 - Validación con **Zod** (`src/middlewares/validate.ts`), seguridad con helmet/hpp/rate-limit, CORS configurable.
+- **Auth JWT + roles** (`src/middlewares/auth.ts`): `authenticate` (Bearer) + `authorize(...roles)`. Roles: `superadmin` (todo + usuarios), `admin` (CRUD contenido), `host` (solo lectura, el backend no le abre nada extra).
 - **Socket.IO** en `/socket.io` (`src/socket.ts`), **Swagger** en `/api/docs` (`src/swagger.ts`).
 - Uploads de ejemplo con multer: `POST /api/v1/uploads` (campo `files`, máx. 20).
 - Estructura:
@@ -45,7 +46,9 @@ Contexto acumulado del proyecto para continuar el trabajo sin volver a preguntar
 ## Decisiones tomadas (NO volver a preguntar)
 
 - `GET /customers` ordenado por fecha descendente (lo piden el panel y la bandeja `/mensajes` del front).
-- `POST /customers` es público (lo usa el formulario `/contacto` del front sin login).
+- `POST /customers` y `POST /reviews` son públicos (los envían los clientes sin login); los GET siguen públicos (los usa el front). Todo lo demás que escribe (POST/PUT/DELETE, uploads) exige JWT de `admin` o `superadmin`.
+- Solo `superadmin` gestiona `/users` y ve `/roles`; ningún superadmin se puede borrar ni cambiar su clave desde edición.
+- Seed idempotente (`npm run db:seed`): crea roles + `superadmin@`/`admin@`/`host@cruzcontroltours.com` (claves por defecto `SuperAdmin123!`/`Admin123!`/`Host123!`, sobreescribibles con `SEED_*_PASSWORD`). Tablas nuevas se aplican con `dz:push` (o `dz:gen` + `dz:mig`).
 - `DATABASE_URL` tiene prioridad sobre las partes `DB_*` (`src/db/index.ts`); SSL solo en producción.
 - Rate-limit global: 100 req / 15 min por IP en `/api`.
 
@@ -56,6 +59,9 @@ PORT=3002
 NODE_ENV=development
 DB_HOST / DB_PORT / DB_USERNAME / DB_PASSWORD / DB_NAME  # o DATABASE_URL (prioridad)
 CORS_ORIGINS=http://localhost:3000,http://localhost:3001
+JWT_SECRET=cambia-este-secreto-largo-y-aleatorio
+JWT_EXPIRES_IN=12h
+SEED_SUPERADMIN_PASSWORD / SEED_ADMIN_PASSWORD / SEED_HOST_PASSWORD
 ```
 
 ## Comandos
@@ -72,11 +78,19 @@ npm run dz:push / dz:studio  # push directo / UI de la DB
 
 ## Pendientes / recomendaciones
 
-- ⚠️ Proteger con auth `GET/DELETE /customers` y la escritura de tours (`POST/PUT/DELETE /tours`): TODOs ya anotados en `customer-routes.ts` y `tour-routes.ts`.
+- Aplicar el schema (`dz:push` o `dz:gen` + `dz:mig`), definir `JWT_SECRET` real y correr `npm run db:seed`.
 - `FRONTEND_URL` existe en el `.env` local pero **no se usa** en `src/` (CORS usa `CORS_ORIGINS`).
 - Completar el documento Swagger (hoy solo lista GET/POST de tours y customers).
 
 ## Historial de sesiones
+
+### 2026-11-19 — auth JWT + roles (users/roles) y rutas protegidas
+
+1. Nuevas tablas `roles` y `users` (`schemas/roles.ts`, `schemas/users.ts` + barrel): rol por FK, email único, hash bcrypt, `active`, timestamps.
+2. `middlewares/auth.ts` (`authenticate` + `authorize`), servicios/controladores/rutas de `auth` (`POST /auth/login` con rate-limit propio, `GET /auth/me`), `users` (CRUD superadmin) y `roles` (lista superadmin). Usuarios nunca exponen el hash; no se puede borrar el último superadmin.
+3. Escritura protegida en las 9 rutas (POST/PUT/DELETE + uploads → admin/superadmin); `POST /customers`, `POST /reviews` y todos los GET siguen públicos para el front.
+4. `db/seed.ts` idempotente + script `db:seed`; `.env.example` con `JWT_SECRET`, `JWT_EXPIRES_IN` y `SEED_*_PASSWORD`.
+5. Test `middlewares/auth.test.ts` (7/7 PASS con jest + `jest.config.js` nuevo; correr con caché local por EPERM en %TEMP% del sandbox).
 
 ### 2026-11-18 (5) — uploads reales a S3
 

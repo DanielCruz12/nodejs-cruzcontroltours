@@ -11,6 +11,7 @@
     "test:coverage": "jest --coverage",
     "start": "node dist/index.js",
     "build": "rimraf ./dist && tsc",
+    "db:seed": "ts-node src/db/seed.ts",
     "dz:gen": "npx drizzle-kit generate",
     "dz:mig": "npx drizzle-kit migrate",
     "dz:push": "npx drizzle-kit push",
