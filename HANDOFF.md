@@ -84,6 +84,13 @@ npm run dz:push / dz:studio  # push directo / UI de la DB
 
 ## Historial de sesiones
 
+### 2026-11-20 — formularios dinámicos de reseñas
+
+1. Tablas nuevas (sin tocar las existentes): `review_forms` (tourId, ownerId, title, token único, isActive), `review_questions` (formId, label, type varchar extensible, required, position, isActive), `review_responses` (formId, bookingId?, authorName?, createdAt; se llama así porque `reviews` ya existía) y `review_answers` (reviewId, questionId, ratingValue 1-5 con check, textValue).
+2. Rutas `review-form-routes.ts`: públicas `GET /review-forms/public/:token` y `POST .../submit` (rate-limit propio, valida obligatorias/rango/duplicados, guarda en transacción); gestión admin/superadmin: CRUD formularios, CRUD preguntas, `POST /:id/duplicate` (409 si el tour destino ya tiene formulario activo, con `existingForm`; `deactivateExisting: true` lo desactiva y continúa), `GET /review-responses` y `GET /review-forms/:id/reviews` (paginado + filtros + promedios por pregunta).
+3. Reglas: preguntas/formularios con respuestas se desactivan, no se borran; tipo de pregunta con respuestas no se cambia. Test de zod `review-form-routes.test.ts` (10 casos).
+4. Aplicar con `dz:push` (o `dz:gen` + `dz:mig`).
+
 ### 2026-11-19 — auth JWT + roles (users/roles) y rutas protegidas
 
 1. Nuevas tablas `roles` y `users` (`schemas/roles.ts`, `schemas/users.ts` + barrel): rol por FK, email único, hash bcrypt, `active`, timestamps.

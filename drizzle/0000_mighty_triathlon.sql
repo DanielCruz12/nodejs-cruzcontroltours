@@ -44,6 +44,44 @@ CREATE TABLE "protocols" (
 	"description" text
 );
 --> statement-breakpoint
+CREATE TABLE "review_answers" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"review_id" integer NOT NULL,
+	"question_id" integer NOT NULL,
+	"rating_value" integer,
+	"text_value" text,
+	CONSTRAINT "review_answers_rating_check" CHECK ("review_answers"."rating_value" IS NULL OR ("review_answers"."rating_value" >= 1 AND "review_answers"."rating_value" <= 5))
+);
+--> statement-breakpoint
+CREATE TABLE "review_forms" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"tour_id" integer NOT NULL,
+	"owner_id" integer NOT NULL,
+	"title" varchar(200) NOT NULL,
+	"token" varchar(64) NOT NULL,
+	"is_active" boolean DEFAULT true NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "review_forms_token_unique" UNIQUE("token")
+);
+--> statement-breakpoint
+CREATE TABLE "review_questions" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"form_id" integer NOT NULL,
+	"label" varchar(300) NOT NULL,
+	"type" varchar(20) DEFAULT 'stars' NOT NULL,
+	"required" boolean DEFAULT false NOT NULL,
+	"position" integer DEFAULT 0 NOT NULL,
+	"is_active" boolean DEFAULT true NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "review_responses" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"form_id" integer NOT NULL,
+	"booking_id" integer,
+	"author_name" varchar(120),
+	"created_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE "reviews" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"tour_id" integer NOT NULL,
@@ -103,6 +141,13 @@ CREATE TABLE "users" (
 ALTER TABLE "bookings" ADD CONSTRAINT "bookings_tour_id_tours_id_fk" FOREIGN KEY ("tour_id") REFERENCES "public"."tours"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "bookings" ADD CONSTRAINT "bookings_departure_id_tour_departures_id_fk" FOREIGN KEY ("departure_id") REFERENCES "public"."tour_departures"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "protocols" ADD CONSTRAINT "protocols_tour_id_tours_id_fk" FOREIGN KEY ("tour_id") REFERENCES "public"."tours"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "review_answers" ADD CONSTRAINT "review_answers_review_id_review_responses_id_fk" FOREIGN KEY ("review_id") REFERENCES "public"."review_responses"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "review_answers" ADD CONSTRAINT "review_answers_question_id_review_questions_id_fk" FOREIGN KEY ("question_id") REFERENCES "public"."review_questions"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "review_forms" ADD CONSTRAINT "review_forms_tour_id_tours_id_fk" FOREIGN KEY ("tour_id") REFERENCES "public"."tours"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "review_forms" ADD CONSTRAINT "review_forms_owner_id_users_id_fk" FOREIGN KEY ("owner_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "review_questions" ADD CONSTRAINT "review_questions_form_id_review_forms_id_fk" FOREIGN KEY ("form_id") REFERENCES "public"."review_forms"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "review_responses" ADD CONSTRAINT "review_responses_form_id_review_forms_id_fk" FOREIGN KEY ("form_id") REFERENCES "public"."review_forms"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "review_responses" ADD CONSTRAINT "review_responses_booking_id_bookings_id_fk" FOREIGN KEY ("booking_id") REFERENCES "public"."bookings"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "reviews" ADD CONSTRAINT "reviews_tour_id_tours_id_fk" FOREIGN KEY ("tour_id") REFERENCES "public"."tours"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "reviews" ADD CONSTRAINT "reviews_booking_id_bookings_id_fk" FOREIGN KEY ("booking_id") REFERENCES "public"."bookings"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "tour_departures" ADD CONSTRAINT "tour_departures_tour_id_tours_id_fk" FOREIGN KEY ("tour_id") REFERENCES "public"."tours"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
