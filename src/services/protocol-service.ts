@@ -7,7 +7,7 @@ export const protocolService = {
     return db.select().from(protocols)
   },
 
-  async getById(id: number): Promise<Protocol | null> {
+  async getById(id: string): Promise<Protocol | null> {
     const rows = await db
       .select()
       .from(protocols)
@@ -21,7 +21,7 @@ export const protocolService = {
   },
 
   async update(
-    id: number,
+    id: string,
     data: Partial<NewProtocol>,
   ): Promise<Protocol | null> {
     const rows = await db
@@ -32,7 +32,7 @@ export const protocolService = {
     return rows[0] ?? null
   },
 
-  async remove(id: number): Promise<boolean> {
+  async remove(id: string): Promise<boolean> {
     const rows = await db
       .delete(protocols)
       .where(eq(protocols.id, id))

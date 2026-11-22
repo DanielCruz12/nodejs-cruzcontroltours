@@ -10,7 +10,7 @@ export const customerService = {
       .orderBy(desc(customers.createdAt))
   },
 
-  async getById(id: number): Promise<Customer | null> {
+  async getById(id: string): Promise<Customer | null> {
     const rows = await db.select().from(customers).where(eq(customers.id, id))
     return rows[0] ?? null
   },
@@ -20,7 +20,7 @@ export const customerService = {
     return rows[0]
   },
 
-  async remove(id: number): Promise<boolean> {
+  async remove(id: string): Promise<boolean> {
     const rows = await db
       .delete(customers)
       .where(eq(customers.id, id))

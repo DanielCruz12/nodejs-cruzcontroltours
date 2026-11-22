@@ -6,7 +6,7 @@ import {
   numeric,
   pgEnum,
   pgTable,
-  serial,
+  uuid,
 } from 'drizzle-orm/pg-core'
 import { tours } from './tours'
 
@@ -19,8 +19,8 @@ export const departureStatus = pgEnum('departure_status', [
 export const tourDepartures = pgTable(
   'tour_departures',
   {
-    id: serial('id').primaryKey(),
-    tourId: integer('tour_id')
+    id: uuid('id').primaryKey().defaultRandom(),
+    tourId: uuid('tour_id')
       .notNull()
       .references(() => tours.id, { onDelete: 'cascade' }),
     startDate: date('start_date').notNull(),

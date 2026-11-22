@@ -1,9 +1,9 @@
 CREATE TYPE "public"."booking_status" AS ENUM('pending', 'paid', 'cancelled');--> statement-breakpoint
 CREATE TYPE "public"."departure_status" AS ENUM('open', 'closed', 'cancelled');--> statement-breakpoint
 CREATE TABLE "bookings" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"tour_id" integer NOT NULL,
-	"departure_id" integer,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"tour_id" uuid NOT NULL,
+	"departure_id" uuid,
 	"user_id" varchar(255) NOT NULL,
 	"guests" integer NOT NULL,
 	"total_price" numeric(10, 2) NOT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE "bookings" (
 );
 --> statement-breakpoint
 CREATE TABLE "categories" (
-	"id" serial PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" varchar(200) NOT NULL,
 	"slug" varchar(200) NOT NULL,
 	"description" text,
@@ -22,7 +22,7 @@ CREATE TABLE "categories" (
 );
 --> statement-breakpoint
 CREATE TABLE "customers" (
-	"id" serial PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"nombre" varchar(200) NOT NULL,
 	"telefono" varchar(50) NOT NULL,
 	"correo" varchar(255) NOT NULL,
@@ -31,32 +31,32 @@ CREATE TABLE "customers" (
 );
 --> statement-breakpoint
 CREATE TABLE "faqs" (
-	"id" serial PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"question" text NOT NULL,
 	"answer" text NOT NULL,
 	"active" boolean DEFAULT true NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "protocols" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"tour_id" integer NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"tour_id" uuid NOT NULL,
 	"title" varchar(200) NOT NULL,
 	"description" text
 );
 --> statement-breakpoint
 CREATE TABLE "review_answers" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"review_id" integer NOT NULL,
-	"question_id" integer NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"review_id" uuid NOT NULL,
+	"question_id" uuid NOT NULL,
 	"rating_value" integer,
 	"text_value" text,
 	CONSTRAINT "review_answers_rating_check" CHECK ("review_answers"."rating_value" IS NULL OR ("review_answers"."rating_value" >= 1 AND "review_answers"."rating_value" <= 5))
 );
 --> statement-breakpoint
 CREATE TABLE "review_forms" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"tour_id" integer NOT NULL,
-	"owner_id" integer NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"tour_id" uuid NOT NULL,
+	"owner_id" uuid NOT NULL,
 	"title" varchar(200) NOT NULL,
 	"token" varchar(64) NOT NULL,
 	"is_active" boolean DEFAULT true NOT NULL,
@@ -65,8 +65,8 @@ CREATE TABLE "review_forms" (
 );
 --> statement-breakpoint
 CREATE TABLE "review_questions" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"form_id" integer NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"form_id" uuid NOT NULL,
 	"label" varchar(300) NOT NULL,
 	"type" varchar(20) DEFAULT 'stars' NOT NULL,
 	"required" boolean DEFAULT false NOT NULL,
@@ -75,17 +75,17 @@ CREATE TABLE "review_questions" (
 );
 --> statement-breakpoint
 CREATE TABLE "review_responses" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"form_id" integer NOT NULL,
-	"booking_id" integer,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"form_id" uuid NOT NULL,
+	"booking_id" uuid,
 	"author_name" varchar(120),
 	"created_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "reviews" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"tour_id" integer NOT NULL,
-	"booking_id" integer NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"tour_id" uuid NOT NULL,
+	"booking_id" uuid NOT NULL,
 	"user_id" varchar(255) NOT NULL,
 	"ratings" jsonb NOT NULL,
 	"avg_rating" numeric(3, 2) NOT NULL,
@@ -95,7 +95,7 @@ CREATE TABLE "reviews" (
 );
 --> statement-breakpoint
 CREATE TABLE "roles" (
-	"id" serial PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" varchar(50) NOT NULL,
 	"description" text,
 	"created_at" timestamp DEFAULT now() NOT NULL,
@@ -103,8 +103,8 @@ CREATE TABLE "roles" (
 );
 --> statement-breakpoint
 CREATE TABLE "tour_departures" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"tour_id" integer NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"tour_id" uuid NOT NULL,
 	"start_date" date NOT NULL,
 	"end_date" date NOT NULL,
 	"capacity" integer NOT NULL,
@@ -114,13 +114,13 @@ CREATE TABLE "tour_departures" (
 );
 --> statement-breakpoint
 CREATE TABLE "tours" (
-	"id" serial PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"title" varchar(200) NOT NULL,
 	"description" text,
 	"price" numeric(10, 2) NOT NULL,
 	"duration_days" integer DEFAULT 1 NOT NULL,
 	"active" boolean DEFAULT true NOT NULL,
-	"category_id" integer,
+	"category_id" uuid,
 	"images" text[] DEFAULT '{}' NOT NULL,
 	"videos" text[] DEFAULT '{}' NOT NULL,
 	"review_criteria" jsonb DEFAULT '[]'::jsonb NOT NULL,
@@ -128,11 +128,11 @@ CREATE TABLE "tours" (
 );
 --> statement-breakpoint
 CREATE TABLE "users" (
-	"id" serial PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" varchar(120) NOT NULL,
 	"email" varchar(255) NOT NULL,
 	"password" varchar(255) NOT NULL,
-	"role_id" integer NOT NULL,
+	"role_id" uuid NOT NULL,
 	"active" boolean DEFAULT true NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	CONSTRAINT "users_email_unique" UNIQUE("email")

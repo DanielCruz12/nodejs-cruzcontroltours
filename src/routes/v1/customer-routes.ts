@@ -14,7 +14,7 @@ const canWrite: RequestHandler[] = [
 ]
 
 const idParams = z.object({
-  id: z.coerce.number().int().min(1),
+  id: z.string().uuid(),
 })
 
 // Formulario de contacto: nombre, teléfono y correo requeridos.

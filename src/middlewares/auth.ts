@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken'
 export type RoleName = 'superadmin' | 'admin' | 'host'
 
 export type AuthPayload = {
-  sub: number
+  sub: string
   email: string
   name: string
   role: RoleName

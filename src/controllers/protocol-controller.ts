@@ -9,7 +9,7 @@ export const protocolController = {
   },
 
   async getById(req: Request, res: Response) {
-    const protocol = await protocolService.getById(Number(req.params.id))
+    const protocol = await protocolService.getById(req.params.id)
     if (!protocol)
       return res.status(404).json({ message: 'Protocol not found' })
     res.json({ data: protocol })
@@ -28,7 +28,7 @@ export const protocolController = {
       if (!tour) return res.status(404).json({ message: 'Tour not found' })
     }
     const protocol = await protocolService.update(
-      Number(req.params.id),
+      req.params.id,
       req.body,
     )
     if (!protocol)
@@ -37,7 +37,7 @@ export const protocolController = {
   },
 
   async remove(req: Request, res: Response) {
-    const ok = await protocolService.remove(Number(req.params.id))
+    const ok = await protocolService.remove(req.params.id)
     if (!ok) return res.status(404).json({ message: 'Protocol not found' })
     res.status(204).send()
   },

@@ -33,7 +33,7 @@ const ROLE_DESCRIPTIONS: Record<string, string> = {
   host: 'Solo lectura',
 }
 
-async function ensureRole(name: string): Promise<number> {
+async function ensureRole(name: string): Promise<string> {
   const existing = await db
     .select({ id: roles.id })
     .from(roles)

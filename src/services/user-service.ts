@@ -25,7 +25,7 @@ function conflict(message: string): never {
   throw Object.assign(new Error(message), { status: 409 })
 }
 
-async function roleIdByName(role: RoleName): Promise<number> {
+async function roleIdByName(role: RoleName): Promise<string> {
   const rows = await db
     .select({ id: roles.id })
     .from(roles)
@@ -38,7 +38,7 @@ async function roleIdByName(role: RoleName): Promise<number> {
 }
 
 function toPublicUser(row: {
-  id: number
+  id: string
   name: string
   email: string
   role: string
@@ -67,7 +67,7 @@ export const userService = {
     return rows.map(toPublicUser)
   },
 
-  async getById(id: number): Promise<PublicUser | null> {
+  async getById(id: string): Promise<PublicUser | null> {
     const rows = await db
       .select(publicColumns)
       .from(users)
@@ -100,7 +100,7 @@ export const userService = {
     return created as PublicUser
   },
 
-  async update(id: number, input: UpdateUserInput): Promise<PublicUser | null> {
+  async update(id: string, input: UpdateUserInput): Promise<PublicUser | null> {
     const target = await this.getById(id)
     if (!target) return null
     // Un superadmin no se puede editar.
@@ -134,7 +134,7 @@ export const userService = {
     return this.getById(id)
   },
 
-  async remove(id: number): Promise<boolean> {
+  async remove(id: string): Promise<boolean> {
     const target = await this.getById(id)
     if (!target) return false
     // Un superadmin no se puede eliminar.

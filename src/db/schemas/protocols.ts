@@ -1,9 +1,9 @@
-import { integer, pgTable, serial, text, varchar } from 'drizzle-orm/pg-core'
+import { pgTable, text, uuid, varchar } from 'drizzle-orm/pg-core'
 import { tours } from './tours'
 
 export const protocols = pgTable('protocols', {
-  id: serial('id').primaryKey(),
-  tourId: integer('tour_id')
+  id: uuid('id').primaryKey().defaultRandom(),
+  tourId: uuid('tour_id')
     .notNull()
     .references(() => tours.id, { onDelete: 'cascade' }),
   title: varchar('title', { length: 200 }).notNull(),

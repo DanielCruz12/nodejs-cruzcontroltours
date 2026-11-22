@@ -8,7 +8,7 @@ export const categoryController = {
   },
 
   async getById(req: Request, res: Response) {
-    const category = await categoryService.getById(Number(req.params.id))
+    const category = await categoryService.getById(req.params.id)
     if (!category)
       return res.status(404).json({ message: 'Category not found' })
     res.json({ data: category })
@@ -22,7 +22,7 @@ export const categoryController = {
   },
 
   async update(req: Request, res: Response) {
-    const id = Number(req.params.id)
+    const id = req.params.id
     if (req.body.slug !== undefined) {
       const taken = await categoryService.getBySlug(req.body.slug)
       if (taken && taken.id !== id)
@@ -35,7 +35,7 @@ export const categoryController = {
   },
 
   async remove(req: Request, res: Response) {
-    const ok = await categoryService.remove(Number(req.params.id))
+    const ok = await categoryService.remove(req.params.id)
     if (!ok) return res.status(404).json({ message: 'Category not found' })
     res.status(204).send()
   },

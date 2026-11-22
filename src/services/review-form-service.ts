@@ -21,14 +21,14 @@ export type FormQuestionInput = {
 }
 
 export type CreateFormInput = {
-  tourId: number
+  tourId: string
   title: string
   questions: FormQuestionInput[]
 }
 
 export type UpdateFormInput = {
   title?: string
-  tourId?: number
+  tourId?: string
   isActive?: boolean
 }
 
@@ -56,7 +56,7 @@ async function generateToken(): Promise<string> {
   fail(500, 'No se pudo generar un token único')
 }
 
-async function ensureTour(tourId: number) {
+async function ensureTour(tourId: string) {
   const rows = await db
     .select({ id: tours.id })
     .from(tours)
@@ -64,7 +64,7 @@ async function ensureTour(tourId: number) {
   if (rows.length === 0) fail(404, 'Tour not found')
 }
 
-async function questionHasAnswers(questionId: number): Promise<boolean> {
+async function questionHasAnswers(questionId: string): Promise<boolean> {
   const rows = await db
     .select({ id: reviewAnswers.id })
     .from(reviewAnswers)
@@ -74,7 +74,7 @@ async function questionHasAnswers(questionId: number): Promise<boolean> {
 }
 
 export const reviewFormService = {
-  async list(tourId?: number) {
+  async list(tourId?: string) {
     const where = tourId !== undefined ? eq(reviewForms.tourId, tourId) : undefined
     const rows = await db
       .select({
@@ -118,7 +118,7 @@ export const reviewFormService = {
             .from(reviewQuestions)
             .where(inArray(reviewQuestions.formId, formIds))
             .orderBy(reviewQuestions.position, reviewQuestions.id)
-    const questionsListByForm = new Map<number, ReviewQuestion[]>()
+    const questionsListByForm = new Map<string, ReviewQuestion[]>()
     for (const question of allQuestions) {
       const list = questionsListByForm.get(question.formId) ?? []
       list.push(question)
@@ -132,7 +132,7 @@ export const reviewFormService = {
     }))
   },
 
-  async getById(id: number) {
+  async getById(id: string) {
     const rows = await db
       .select({
         id: reviewForms.id,
@@ -156,7 +156,7 @@ export const reviewFormService = {
     return { ...form, questions }
   },
 
-  async create(input: CreateFormInput, ownerId: number) {
+  async create(input: CreateFormInput, ownerId: string) {
     await ensureTour(input.tourId)
     if (input.questions.length === 0) {
       fail(400, 'El formulario necesita al menos una pregunta')
@@ -186,7 +186,7 @@ export const reviewFormService = {
     return this.getById(formId)
   },
 
-  async update(id: number, input: UpdateFormInput) {
+  async update(id: string, input: UpdateFormInput) {
     if (input.tourId !== undefined) await ensureTour(input.tourId)
     const patch: Partial<typeof reviewForms.$inferInsert> = {}
     if (input.title !== undefined) patch.title = input.title.trim()
@@ -202,7 +202,7 @@ export const reviewFormService = {
   },
 
   /** Borra el formulario; si ya tiene respuestas, lo desactiva en su lugar. */
-  async remove(id: number): Promise<{ deleted: boolean } | null> {
+  async remove(id: string): Promise<{ deleted: boolean } | null> {
     const existing = await db
       .select({ id: reviewForms.id })
       .from(reviewForms)
@@ -224,7 +224,7 @@ export const reviewFormService = {
     return { deleted: true }
   },
 
-  async createQuestion(formId: number, input: FormQuestionInput) {
+  async createQuestion(formId: string, input: FormQuestionInput) {
     const form = await db
       .select({ id: reviewForms.id })
       .from(reviewForms)
@@ -252,7 +252,7 @@ export const reviewFormService = {
     return inserted[0]
   },
 
-  async updateQuestion(id: number, input: UpdateQuestionInput) {
+  async updateQuestion(id: string, input: UpdateQuestionInput) {
     const existing = await db
       .select()
       .from(reviewQuestions)
@@ -282,7 +282,7 @@ export const reviewFormService = {
   },
 
   /** Quita la pregunta; si tiene respuestas, la desactiva en su lugar. */
-  async removeQuestion(id: number): Promise<{ deleted: boolean } | null> {
+  async removeQuestion(id: string): Promise<{ deleted: boolean } | null> {
     const existing = await db
       .select({ id: reviewQuestions.id })
       .from(reviewQuestions)
@@ -300,9 +300,9 @@ export const reviewFormService = {
   },
 
   async duplicate(
-    id: number,
-    input: { tourId: number; title: string; deactivateExisting?: boolean },
-    ownerId: number,
+    id: string,
+    input: { tourId: string; title: string; deactivateExisting?: boolean },
+    ownerId: string,
   ) {
     const source = await this.getById(id)
     if (!source) return null

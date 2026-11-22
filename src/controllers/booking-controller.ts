@@ -8,7 +8,7 @@ export const bookingController = {
   },
 
   async getById(req: Request, res: Response) {
-    const booking = await bookingService.getById(Number(req.params.id))
+    const booking = await bookingService.getById(req.params.id)
     if (!booking)
       return res.status(404).json({ message: 'Booking not found' })
     res.json({ data: booking })
@@ -16,7 +16,7 @@ export const bookingController = {
 
   async update(req: Request, res: Response) {
     const booking = await bookingService.update(
-      Number(req.params.id),
+      req.params.id,
       req.body,
     )
     if (!booking)
@@ -25,7 +25,7 @@ export const bookingController = {
   },
 
   async remove(req: Request, res: Response) {
-    const ok = await bookingService.remove(Number(req.params.id))
+    const ok = await bookingService.remove(req.params.id)
     if (!ok) return res.status(404).json({ message: 'Booking not found' })
     res.status(204).send()
   },

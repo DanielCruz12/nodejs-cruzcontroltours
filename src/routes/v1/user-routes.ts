@@ -7,7 +7,7 @@ import { validateBody, validateParams } from '../../middlewares/validate'
 const router = Router()
 
 const idParams = z.object({
-  id: z.coerce.number().int().min(1),
+  id: z.string().uuid(),
 })
 
 const roleEnum = z.enum(['superadmin', 'admin', 'host'])

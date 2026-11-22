@@ -27,7 +27,7 @@ const submitLimiter = rateLimit({
 })
 
 const idParams = z.object({
-  id: z.coerce.number().int().min(1),
+  id: z.string().uuid(),
 })
 
 const tokenParams = z.object({
@@ -52,7 +52,7 @@ const questionSchema = z.object({
 })
 
 export const formSchema = z.object({
-  tourId: z.coerce.number().int().min(1),
+  tourId: z.string().uuid(),
   title: z.string().trim().min(1, 'El título es requerido').max(200),
   questions: z
     .array(questionSchema)
@@ -62,7 +62,7 @@ export const formSchema = z.object({
 
 const formUpdateSchema = z.object({
   title: z.string().trim().min(1).max(200).optional(),
-  tourId: z.coerce.number().int().min(1).optional(),
+  tourId: z.string().uuid().optional(),
   isActive: z.boolean().optional(),
 })
 
@@ -75,19 +75,19 @@ const questionUpdateSchema = z.object({
 })
 
 const duplicateSchema = z.object({
-  tourId: z.coerce.number().int().min(1),
+  tourId: z.string().uuid(),
   title: z.string().trim().min(1, 'El título es requerido').max(200),
   deactivateExisting: z.boolean().optional(),
 })
 
 const answerSchema = z.object({
-  questionId: z.coerce.number().int().min(1),
+  questionId: z.string().uuid(),
   ratingValue: z.number().int().min(1).max(5).nullish(),
   textValue: z.string().max(2000).nullish(),
 })
 
 export const submitSchema = z.object({
-  bookingId: z.coerce.number().int().min(1).nullish(),
+  bookingId: z.string().uuid().nullish(),
   authorName: z.string().trim().max(120).nullish(),
   answers: z.array(answerSchema).max(50),
 })

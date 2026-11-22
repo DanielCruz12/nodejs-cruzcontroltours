@@ -2,7 +2,7 @@ import {
   boolean,
   integer,
   pgTable,
-  serial,
+  uuid,
   varchar,
 } from 'drizzle-orm/pg-core'
 import { reviewForms } from './review-forms'
@@ -10,8 +10,8 @@ import { reviewForms } from './review-forms'
 // Tipo como varchar (no pgEnum) para agregar tipos después sin migraciones
 // de enum: hoy 'stars' | 'text'.
 export const reviewQuestions = pgTable('review_questions', {
-  id: serial('id').primaryKey(),
-  formId: integer('form_id')
+  id: uuid('id').primaryKey().defaultRandom(),
+  formId: uuid('form_id')
     .notNull()
     .references(() => reviewForms.id, { onDelete: 'cascade' }),
   label: varchar('label', { length: 300 }).notNull(),

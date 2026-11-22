@@ -13,13 +13,13 @@ const canWrite: RequestHandler[] = [
 ]
 
 const idParams = z.object({
-  id: z.coerce.number().int().min(1),
+  id: z.string().uuid(),
 })
 
 export const protocolSchema = z.object({
-  tourId: z.coerce.number().int().min(1),
+  tourId: z.string().uuid(),
   title: z.string().trim().min(1, 'Title is required').max(200),
-  description: z.string().trim().max(2000).nullish(),
+  description: z.string().trim().max(100000).nullish(),
 })
 
 const protocolUpdateSchema = protocolSchema.partial()

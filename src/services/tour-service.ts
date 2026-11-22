@@ -7,7 +7,7 @@ export const tourService = {
     return db.select().from(tours)
   },
 
-  async getById(id: number): Promise<Tour | null> {
+  async getById(id: string): Promise<Tour | null> {
     const rows = await db.select().from(tours).where(eq(tours.id, id))
     return rows[0] ?? null
   },
@@ -17,7 +17,7 @@ export const tourService = {
     return rows[0]
   },
 
-  async update(id: number, data: Partial<NewTour>): Promise<Tour | null> {
+  async update(id: string, data: Partial<NewTour>): Promise<Tour | null> {
     const rows = await db
       .update(tours)
       .set(data)
@@ -26,7 +26,7 @@ export const tourService = {
     return rows[0] ?? null
   },
 
-  async remove(id: number): Promise<boolean> {
+  async remove(id: string): Promise<boolean> {
     const rows = await db
       .delete(tours)
       .where(eq(tours.id, id))

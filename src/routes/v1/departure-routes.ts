@@ -13,7 +13,7 @@ const canWrite: RequestHandler[] = [
 ]
 
 const idParams = z.object({
-  id: z.coerce.number().int().min(1),
+  id: z.string().uuid(),
 })
 
 const dateString = z
@@ -33,7 +33,7 @@ const priceOverride = z
   .nullish()
 
 const departureObject = z.object({
-  tourId: z.coerce.number().int().min(1),
+  tourId: z.string().uuid(),
   startDate: dateString,
   endDate: dateString,
   capacity: z.coerce.number().int().min(1),

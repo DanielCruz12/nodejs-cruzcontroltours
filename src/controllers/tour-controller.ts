@@ -8,7 +8,7 @@ export const tourController = {
   },
 
   async getById(req: Request, res: Response) {
-    const tour = await tourService.getById(Number(req.params.id))
+    const tour = await tourService.getById(req.params.id)
     if (!tour) return res.status(404).json({ message: 'Tour no encontrado' })
     res.json({ data: tour })
   },
@@ -19,13 +19,13 @@ export const tourController = {
   },
 
   async update(req: Request, res: Response) {
-    const tour = await tourService.update(Number(req.params.id), req.body)
+    const tour = await tourService.update(req.params.id, req.body)
     if (!tour) return res.status(404).json({ message: 'Tour no encontrado' })
     res.json({ data: tour })
   },
 
   async remove(req: Request, res: Response) {
-    const ok = await tourService.remove(Number(req.params.id))
+    const ok = await tourService.remove(req.params.id)
     if (!ok) return res.status(404).json({ message: 'Tour no encontrado' })
     res.status(204).send()
   },

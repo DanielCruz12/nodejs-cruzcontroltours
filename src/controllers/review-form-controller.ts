@@ -22,7 +22,7 @@ function sendError(res: Response, error: unknown) {
 export const reviewFormController = {
   async list(req: Request, res: Response) {
     try {
-      const tourId = req.query.tourId ? Number(req.query.tourId) : undefined
+      const tourId = req.query.tourId ? String(req.query.tourId) : undefined
       const data = await reviewFormService.list(tourId)
       res.json({ data })
     } catch (error) {
@@ -32,7 +32,7 @@ export const reviewFormController = {
 
   async getById(req: Request, res: Response) {
     try {
-      const form = await reviewFormService.getById(Number(req.params.id))
+      const form = await reviewFormService.getById(req.params.id)
       if (!form) return res.status(404).json({ message: 'Form not found' })
       res.json({ data: form })
     } catch (error) {
@@ -42,7 +42,7 @@ export const reviewFormController = {
 
   async create(req: AuthRequest, res: Response) {
     try {
-      const form = await reviewFormService.create(req.body, req.user?.sub ?? 0)
+      const form = await reviewFormService.create(req.body, req.user?.sub ?? '')
       res.status(201).json({ data: form })
     } catch (error) {
       sendError(res, error)
@@ -52,7 +52,7 @@ export const reviewFormController = {
   async update(req: Request, res: Response) {
     try {
       const form = await reviewFormService.update(
-        Number(req.params.id),
+        req.params.id,
         req.body,
       )
       if (!form) return res.status(404).json({ message: 'Form not found' })
@@ -64,11 +64,11 @@ export const reviewFormController = {
 
   async remove(req: Request, res: Response) {
     try {
-      const result = await reviewFormService.remove(Number(req.params.id))
+      const result = await reviewFormService.remove(req.params.id)
       if (!result) return res.status(404).json({ message: 'Form not found' })
       // Con respuestas se desactiva en lugar de borrarse.
       if (!result.deleted) {
-        const form = await reviewFormService.getById(Number(req.params.id))
+        const form = await reviewFormService.getById(req.params.id)
         return res.json({ data: form, deactivated: true })
       }
       res.status(204).send()
@@ -80,9 +80,9 @@ export const reviewFormController = {
   async duplicate(req: AuthRequest, res: Response) {
     try {
       const form = await reviewFormService.duplicate(
-        Number(req.params.id),
+        req.params.id,
         req.body,
-        req.user?.sub ?? 0,
+        req.user?.sub ?? '',
       )
       if (!form) return res.status(404).json({ message: 'Form not found' })
       res.status(201).json({ data: form })
@@ -94,7 +94,7 @@ export const reviewFormController = {
   async createQuestion(req: Request, res: Response) {
     try {
       const question = await reviewFormService.createQuestion(
-        Number(req.params.id),
+        req.params.id,
         req.body,
       )
       res.status(201).json({ data: question })
@@ -106,7 +106,7 @@ export const reviewFormController = {
   async updateQuestion(req: Request, res: Response) {
     try {
       const question = await reviewFormService.updateQuestion(
-        Number(req.params.id),
+        req.params.id,
         req.body,
       )
       if (!question)
@@ -120,7 +120,7 @@ export const reviewFormController = {
   async removeQuestion(req: Request, res: Response) {
     try {
       const result = await reviewFormService.removeQuestion(
-        Number(req.params.id),
+        req.params.id,
       )
       if (!result)
         return res.status(404).json({ message: 'Question not found' })

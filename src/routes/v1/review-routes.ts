@@ -14,7 +14,7 @@ const canWrite: RequestHandler[] = [
 ]
 
 const idParams = z.object({
-  id: z.coerce.number().int().min(1),
+  id: z.string().uuid(),
 })
 
 const ratingSchema = z.object({
@@ -23,8 +23,8 @@ const ratingSchema = z.object({
 })
 
 export const reviewSchema = z.object({
-  tourId: z.coerce.number().int().min(1),
-  bookingId: z.coerce.number().int().min(1),
+  tourId: z.string().uuid(),
+  bookingId: z.string().uuid(),
   userId: z.string().trim().min(1, 'User is required').max(255),
   ratings: z.array(ratingSchema).min(1, 'At least one rating is required'),
   comment: z.string().trim().max(2000).nullish(),

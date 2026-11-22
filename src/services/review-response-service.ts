@@ -9,20 +9,20 @@ import {
 } from '../db/schema'
 
 export type SubmitAnswerInput = {
-  questionId: number
+  questionId: string
   ratingValue?: number | null
   textValue?: string | null
 }
 
 export type SubmitResponseInput = {
-  bookingId?: number | null
+  bookingId?: string | null
   authorName?: string | null
   answers: SubmitAnswerInput[]
 }
 
 export type ResponsesQuery = {
-  formId?: number
-  tourId?: number
+  formId?: string
+  tourId?: string
   page: number
   limit: number
 }
@@ -57,7 +57,7 @@ export const reviewResponseService = {
       fail(400, 'Responde al menos una pregunta')
     }
     // Sin duplicados ni preguntas ajenas/inactivas.
-    const seen = new Set<number>()
+    const seen = new Set<string>()
     for (const answer of input.answers) {
       const question = byId.get(answer.questionId)
       if (!question) {
@@ -183,7 +183,7 @@ export const reviewResponseService = {
               ),
             )
 
-    const answersByReview = new Map<number, typeof answers>()
+    const answersByReview = new Map<string, typeof answers>()
     for (const answer of answers) {
       const list = answersByReview.get(answer.reviewId) ?? []
       list.push(answer)

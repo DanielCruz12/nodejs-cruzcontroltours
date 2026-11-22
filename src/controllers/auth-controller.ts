@@ -27,7 +27,7 @@ export const authController = {
 
   async me(req: AuthRequest, res: Response) {
     try {
-      const user = await authService.me(req.user?.sub ?? 0)
+      const user = await authService.me(req.user?.sub ?? '')
       if (!user) return res.status(401).json({ message: 'No autenticado' })
       res.json({ data: user })
     } catch (error) {

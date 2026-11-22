@@ -1,20 +1,19 @@
 import {
   boolean,
-  integer,
   pgTable,
-  serial,
   timestamp,
+  uuid,
   varchar,
 } from 'drizzle-orm/pg-core'
 import { tours } from './tours'
 import { users } from './users'
 
 export const reviewForms = pgTable('review_forms', {
-  id: serial('id').primaryKey(),
-  tourId: integer('tour_id')
+  id: uuid('id').primaryKey().defaultRandom(),
+  tourId: uuid('tour_id')
     .notNull()
     .references(() => tours.id, { onDelete: 'cascade' }),
-  ownerId: integer('owner_id')
+  ownerId: uuid('owner_id')
     .notNull()
     .references(() => users.id),
   title: varchar('title', { length: 200 }).notNull(),

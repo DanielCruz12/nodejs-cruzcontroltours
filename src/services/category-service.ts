@@ -7,7 +7,7 @@ export const categoryService = {
     return db.select().from(categories)
   },
 
-  async getById(id: number): Promise<Category | null> {
+  async getById(id: string): Promise<Category | null> {
     const rows = await db
       .select()
       .from(categories)
@@ -29,7 +29,7 @@ export const categoryService = {
   },
 
   async update(
-    id: number,
+    id: string,
     data: Partial<NewCategory>,
   ): Promise<Category | null> {
     const rows = await db
@@ -40,7 +40,7 @@ export const categoryService = {
     return rows[0] ?? null
   },
 
-  async remove(id: number): Promise<boolean> {
+  async remove(id: string): Promise<boolean> {
     const rows = await db
       .delete(categories)
       .where(eq(categories.id, id))

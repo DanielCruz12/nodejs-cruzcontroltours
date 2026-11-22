@@ -13,7 +13,7 @@ const canWrite: RequestHandler[] = [
 ]
 
 const idParams = z.object({
-  id: z.coerce.number().int().min(1),
+  id: z.string().uuid(),
 })
 
 const tourSchema = z.object({
@@ -29,7 +29,7 @@ const tourSchema = z.object({
   ]),
   durationDays: z.coerce.number().int().min(1).optional(),
   active: z.boolean().optional(),
-  categoryId: z.coerce.number().int().min(1).nullish(),
+  categoryId: z.string().uuid().nullish(),
   images: z.array(z.string().trim().min(1)).optional(),
   videos: z.array(z.string().trim().min(1)).optional(),
   reviewCriteria: z.array(z.string().trim().min(1)).optional(),

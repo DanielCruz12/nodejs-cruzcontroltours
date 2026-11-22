@@ -8,7 +8,7 @@ export const customerController = {
   },
 
   async getById(req: Request, res: Response) {
-    const customer = await customerService.getById(Number(req.params.id))
+    const customer = await customerService.getById(req.params.id)
     if (!customer)
       return res.status(404).json({ message: 'Cliente no encontrado' })
     res.json({ data: customer })
@@ -20,7 +20,7 @@ export const customerController = {
   },
 
   async remove(req: Request, res: Response) {
-    const ok = await customerService.remove(Number(req.params.id))
+    const ok = await customerService.remove(req.params.id)
     if (!ok) return res.status(404).json({ message: 'Cliente no encontrado' })
     res.status(204).send()
   },

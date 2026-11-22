@@ -47,16 +47,19 @@ function check(name, cond, extra = "") {
   else { fail++; console.log(`FAIL ${name} ${extra}`); }
 }
 
+const UUID_1 = "11111111-1111-4111-8111-111111111111";
+const UUID_2 = "22222222-2222-4222-8222-222222222222";
 const goodReview = {
-  tourId: 1, bookingId: 2, userId: "user_abc",
+  tourId: UUID_1, bookingId: UUID_2, userId: "user_abc",
   ratings: [{ criterion: "Guide", score: 5 }, { criterion: "Food", score: 4 }],
   comment: "Great",
 };
 check("R1 valid review", reviewSchema.safeParse(goodReview).success);
 check("R2 score 0 fails", !reviewSchema.safeParse({ ...goodReview, ratings: [{ criterion: "Guide", score: 0 }] }).success);
 check("R3 score 6 fails", !reviewSchema.safeParse({ ...goodReview, ratings: [{ criterion: "Guide", score: 6 }] }).success);
-const coerced = reviewSchema.safeParse({ ...goodReview, ratings: [{ criterion: "Guide", score: "3" }], tourId: "1" });
-check("R4 coerce score+tourId", coerced.success && coerced.data.ratings[0].score === 3 && coerced.data.tourId === 1);
+const coerced = reviewSchema.safeParse({ ...goodReview, ratings: [{ criterion: "Guide", score: "3" }] });
+check("R4 coerce score", coerced.success && coerced.data.ratings[0].score === 3 && coerced.data.tourId === UUID_1);
+check("R4b non-uuid tourId fails", !reviewSchema.safeParse({ ...goodReview, tourId: "1" }).success);
 check("R5 empty ratings fails", !reviewSchema.safeParse({ ...goodReview, ratings: [] }).success);
 check("R6 missing userId fails", (() => { const b = { ...goodReview }; delete b.userId; return !reviewSchema.safeParse(b).success; })());
 check("R7 no comment passes", (() => { const b = { ...goodReview }; delete b.comment; return reviewSchema.safeParse(b).success; })());
@@ -72,7 +75,7 @@ check("G1 valid category", categorySchema.safeParse(goodCat).success);
 check("G2 bad slug fails", !categorySchema.safeParse({ ...goodCat, slug: "My Slug!" }).success);
 check("G3 missing name fails", !categorySchema.safeParse({ slug: "x" }).success);
 
-const goodDep = { tourId: 1, startDate: "2026-12-01", endDate: "2026-12-05", capacity: 20 };
+const goodDep = { tourId: UUID_1, startDate: "2026-12-01", endDate: "2026-12-05", capacity: 20 };
 check("D1 valid departure", departureSchema.safeParse(goodDep).success);
 check("D2 end<start fails", !departureSchema.safeParse({ ...goodDep, endDate: "2026-11-30" }).success);
 check("D3 bad date fails", !departureSchema.safeParse({ ...goodDep, startDate: "12/01/2026" }).success);
@@ -83,11 +86,10 @@ check("D6 null override passes", departureSchema.safeParse({ ...goodDep, priceOv
 check("F1 valid faq", faqSchema.safeParse({ question: "Q?", answer: "A." }).success);
 check("F2 empty question fails", !faqSchema.safeParse({ question: " ", answer: "A." }).success);
 
-check("P1 valid protocol", protocolSchema.safeParse({ tourId: 2, title: "Safety" }).success);
+check("P1 valid protocol", protocolSchema.safeParse({ tourId: UUID_2, title: "Safety" }).success);
 check("P2 missing tourId fails", !protocolSchema.safeParse({ title: "Safety" }).success);
-const pCoerced = protocolSchema.safeParse({ tourId: "2", title: "Safety" });
-check("P3 tourId coerced", pCoerced.success && pCoerced.data.tourId === 2);
-check("P4 tourId 0 fails", !protocolSchema.safeParse({ tourId: 0, title: "Safety" }).success);
+check("P3 non-uuid tourId fails", !protocolSchema.safeParse({ tourId: "2", title: "Safety" }).success);
+check("P4 numeric tourId fails", !protocolSchema.safeParse({ tourId: 0, title: "Safety" }).success);
 
 console.log(`\nTOTAL pass=${pass} fail=${fail}`);
 process.exit(fail ? 1 : 0);

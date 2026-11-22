@@ -1,11 +1,10 @@
 import {
-  integer,
   jsonb,
   numeric,
   pgTable,
-  serial,
   text,
   timestamp,
+  uuid,
   varchar,
 } from 'drizzle-orm/pg-core'
 import { bookings } from './bookings'
@@ -17,11 +16,11 @@ export type Rating = {
 }
 
 export const reviews = pgTable('reviews', {
-  id: serial('id').primaryKey(),
-  tourId: integer('tour_id')
+  id: uuid('id').primaryKey().defaultRandom(),
+  tourId: uuid('tour_id')
     .notNull()
     .references(() => tours.id, { onDelete: 'cascade' }),
-  bookingId: integer('booking_id')
+  bookingId: uuid('booking_id')
     .notNull()
     .unique()
     .references(() => bookings.id, { onDelete: 'cascade' }),

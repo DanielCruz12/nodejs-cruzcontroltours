@@ -7,12 +7,12 @@ export const reviewService = {
     return db.select().from(reviews)
   },
 
-  async getById(id: number): Promise<Review | null> {
+  async getById(id: string): Promise<Review | null> {
     const rows = await db.select().from(reviews).where(eq(reviews.id, id))
     return rows[0] ?? null
   },
 
-  async getByBookingId(bookingId: number): Promise<Review | null> {
+  async getByBookingId(bookingId: string): Promise<Review | null> {
     const rows = await db
       .select()
       .from(reviews)
@@ -25,7 +25,7 @@ export const reviewService = {
     return rows[0]
   },
 
-  async remove(id: number): Promise<boolean> {
+  async remove(id: string): Promise<boolean> {
     const rows = await db
       .delete(reviews)
       .where(eq(reviews.id, id))

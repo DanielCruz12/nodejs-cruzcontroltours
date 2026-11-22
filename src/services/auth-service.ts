@@ -6,7 +6,7 @@ import { roles, users } from '../db/schema'
 import type { AuthPayload, RoleName } from '../middlewares/auth'
 
 export type PublicUser = {
-  id: number
+  id: string
   name: string
   email: string
   role: RoleName
@@ -20,7 +20,7 @@ export type LoginResult = {
 }
 
 function toPublicUser(row: {
-  id: number
+  id: string
   name: string
   email: string
   role: string
@@ -72,7 +72,7 @@ export const authService = {
     return { token, user: toPublicUser(user) }
   },
 
-  async me(userId: number): Promise<PublicUser | null> {
+  async me(userId: string): Promise<PublicUser | null> {
     const rows = await db
       .select({
         id: users.id,

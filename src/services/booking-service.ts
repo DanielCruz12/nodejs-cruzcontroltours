@@ -7,7 +7,7 @@ export const bookingService = {
     return db.select().from(bookings)
   },
 
-  async getById(id: number): Promise<Booking | null> {
+  async getById(id: string): Promise<Booking | null> {
     const rows = await db
       .select()
       .from(bookings)
@@ -16,7 +16,7 @@ export const bookingService = {
   },
 
   async update(
-    id: number,
+    id: string,
     data: Partial<NewBooking>,
   ): Promise<Booking | null> {
     const rows = await db
@@ -27,7 +27,7 @@ export const bookingService = {
     return rows[0] ?? null
   },
 
-  async remove(id: number): Promise<boolean> {
+  async remove(id: string): Promise<boolean> {
     const rows = await db
       .delete(bookings)
       .where(eq(bookings.id, id))

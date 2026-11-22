@@ -3,8 +3,8 @@ import {
   check,
   integer,
   pgTable,
-  serial,
   text,
+  uuid,
 } from 'drizzle-orm/pg-core'
 import { reviewQuestions } from './review-questions'
 import { reviewResponses } from './review-responses'
@@ -12,11 +12,11 @@ import { reviewResponses } from './review-responses'
 export const reviewAnswers = pgTable(
   'review_answers',
   {
-    id: serial('id').primaryKey(),
-    reviewId: integer('review_id')
+    id: uuid('id').primaryKey().defaultRandom(),
+    reviewId: uuid('review_id')
       .notNull()
       .references(() => reviewResponses.id, { onDelete: 'cascade' }),
-    questionId: integer('question_id')
+    questionId: uuid('question_id')
       .notNull()
       .references(() => reviewQuestions.id, { onDelete: 'cascade' }),
     ratingValue: integer('rating_value'),

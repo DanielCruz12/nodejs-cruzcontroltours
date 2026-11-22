@@ -9,7 +9,7 @@ export const departureController = {
   },
 
   async getById(req: Request, res: Response) {
-    const departure = await departureService.getById(Number(req.params.id))
+    const departure = await departureService.getById(req.params.id)
     if (!departure)
       return res.status(404).json({ message: 'Departure not found' })
     res.json({ data: departure })
@@ -28,7 +28,7 @@ export const departureController = {
       if (!tour) return res.status(404).json({ message: 'Tour not found' })
     }
     const departure = await departureService.update(
-      Number(req.params.id),
+      req.params.id,
       req.body,
     )
     if (!departure)
@@ -37,7 +37,7 @@ export const departureController = {
   },
 
   async remove(req: Request, res: Response) {
-    const ok = await departureService.remove(Number(req.params.id))
+    const ok = await departureService.remove(req.params.id)
     if (!ok) return res.status(404).json({ message: 'Departure not found' })
     res.status(204).send()
   },

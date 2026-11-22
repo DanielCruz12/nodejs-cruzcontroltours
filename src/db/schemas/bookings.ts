@@ -5,8 +5,8 @@ import {
   numeric,
   pgEnum,
   pgTable,
-  serial,
   timestamp,
+  uuid,
   varchar,
 } from 'drizzle-orm/pg-core'
 import { tourDepartures } from './tour-departures'
@@ -21,11 +21,11 @@ export const bookingStatus = pgEnum('booking_status', [
 export const bookings = pgTable(
   'bookings',
   {
-    id: serial('id').primaryKey(),
-    tourId: integer('tour_id')
+    id: uuid('id').primaryKey().defaultRandom(),
+    tourId: uuid('tour_id')
       .notNull()
       .references(() => tours.id),
-    departureId: integer('departure_id').references(() => tourDepartures.id, {
+    departureId: uuid('departure_id').references(() => tourDepartures.id, {
       onDelete: 'set null',
     }),
     userId: varchar('user_id', { length: 255 }).notNull(),

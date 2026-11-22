@@ -1,8 +1,8 @@
-import { pgTable, serial, text, timestamp, varchar } from 'drizzle-orm/pg-core'
+import { pgTable, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core'
 
 // Formulario de contacto: nombre, teléfono y correo requeridos.
 export const customers = pgTable('customers', {
-  id: serial('id').primaryKey(),
+  id: uuid('id').primaryKey().defaultRandom(),
   nombre: varchar('nombre', { length: 200 }).notNull(),
   telefono: varchar('telefono', { length: 50 }).notNull(),
   correo: varchar('correo', { length: 255 }).notNull(),

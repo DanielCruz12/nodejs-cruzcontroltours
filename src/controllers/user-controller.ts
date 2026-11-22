@@ -26,7 +26,7 @@ export const userController = {
 
   async getById(req: Request, res: Response) {
     try {
-      const user = await userService.getById(Number(req.params.id))
+      const user = await userService.getById(req.params.id)
       if (!user) return res.status(404).json({ message: 'User not found' })
       res.json({ data: user })
     } catch (error) {
@@ -45,7 +45,7 @@ export const userController = {
 
   async update(req: Request, res: Response) {
     try {
-      const user = await userService.update(Number(req.params.id), req.body)
+      const user = await userService.update(req.params.id, req.body)
       if (!user) return res.status(404).json({ message: 'User not found' })
       res.json({ data: user })
     } catch (error) {
@@ -55,7 +55,7 @@ export const userController = {
 
   async remove(req: Request, res: Response) {
     try {
-      const ok = await userService.remove(Number(req.params.id))
+      const ok = await userService.remove(req.params.id)
       if (!ok) return res.status(404).json({ message: 'User not found' })
       res.status(204).send()
     } catch (error) {

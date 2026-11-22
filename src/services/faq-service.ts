@@ -7,7 +7,7 @@ export const faqService = {
     return db.select().from(faqs)
   },
 
-  async getById(id: number): Promise<Faq | null> {
+  async getById(id: string): Promise<Faq | null> {
     const rows = await db.select().from(faqs).where(eq(faqs.id, id))
     return rows[0] ?? null
   },
@@ -17,7 +17,7 @@ export const faqService = {
     return rows[0]
   },
 
-  async update(id: number, data: Partial<NewFaq>): Promise<Faq | null> {
+  async update(id: string, data: Partial<NewFaq>): Promise<Faq | null> {
     const rows = await db
       .update(faqs)
       .set(data)
@@ -26,7 +26,7 @@ export const faqService = {
     return rows[0] ?? null
   },
 
-  async remove(id: number): Promise<boolean> {
+  async remove(id: string): Promise<boolean> {
     const rows = await db
       .delete(faqs)
       .where(eq(faqs.id, id))

@@ -1,7 +1,7 @@
-import { boolean, pgTable, serial, text } from 'drizzle-orm/pg-core'
+import { boolean, pgTable, text, uuid } from 'drizzle-orm/pg-core'
 
 export const faqs = pgTable('faqs', {
-  id: serial('id').primaryKey(),
+  id: uuid('id').primaryKey().defaultRandom(),
   question: text('question').notNull(),
   answer: text('answer').notNull(),
   active: boolean('active').notNull().default(true),

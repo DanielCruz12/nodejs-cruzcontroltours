@@ -1,20 +1,19 @@
 import {
   boolean,
-  integer,
   pgTable,
-  serial,
   timestamp,
+  uuid,
   varchar,
 } from 'drizzle-orm/pg-core'
 import { roles } from './roles'
 
 export const users = pgTable('users', {
-  id: serial('id').primaryKey(),
+  id: uuid('id').primaryKey().defaultRandom(),
   name: varchar('name', { length: 120 }).notNull(),
   email: varchar('email', { length: 255 }).notNull().unique(),
   // Hash bcrypt de la contraseña: nunca se devuelve en la API.
   password: varchar('password', { length: 255 }).notNull(),
-  roleId: integer('role_id')
+  roleId: uuid('role_id')
     .notNull()
     .references(() => roles.id, { onDelete: 'restrict' }),
   active: boolean('active').notNull().default(true),

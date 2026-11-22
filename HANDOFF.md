@@ -84,6 +84,13 @@ npm run dz:push / dz:studio  # push directo / UI de la DB
 
 ## Historial de sesiones
 
+### 2026-11-22 — migración de ids a UUID (todas las tablas)
+
+1. Los 14 schemas usan `uuid().primaryKey().defaultRandom()` y FKs uuid (`bookings.userId`/`reviews.userId` siguen varchar: son ids externos). Rutas: `z.string().uuid()` en params y FKs de body; controladores sin `Number()` en ids (`sub ?? ''`, queries con `String()`); servicios/seed/JWT (`AuthPayload.sub`) a `string`. No-id intactos (guests, capacity, position, durationDays, scores, precios, page/limit).
+2. Tests actualizados a UUID (`review-form-routes.test.ts`, `auth.test.ts`, `backend-verify.tmp.cjs`): jest 18/18, verify 28/28, `tsc --noEmit` limpio.
+3. Migración `drizzle/0001_exotic_annihilus.sql`: la de drizzle-kit se reescribió (suelta las 15 FKs, `USING gen_random_uuid()`, `DROP DEFAULT` previo, `CREATE EXTENSION pgcrypto`, re-alta de FKs, drop de secuencias `*_id_seq`). Lleva guarda que aborta si hay datos: el usuario borra la BD y remigra desde cero.
+4. Panel y front migrados a ids string en la misma sesión (ver HANDOFF del panel): tipos, slices, selects, páginas `[id]`, slug de tour del front ahora termina en UUID (`/-([0-9a-f-]{36})$/`).
+
 ### 2026-11-20 — formularios dinámicos de reseñas
 
 1. Tablas nuevas (sin tocar las existentes): `review_forms` (tourId, ownerId, title, token único, isActive), `review_questions` (formId, label, type varchar extensible, required, position, isActive), `review_responses` (formId, bookingId?, authorName?, createdAt; se llama así porque `reviews` ya existía) y `review_answers` (reviewId, questionId, ratingValue 1-5 con check, textValue).

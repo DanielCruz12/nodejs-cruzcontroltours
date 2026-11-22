@@ -21,7 +21,7 @@ export const reviewController = {
   },
 
   async getById(req: Request, res: Response) {
-    const review = await reviewService.getById(Number(req.params.id))
+    const review = await reviewService.getById(req.params.id)
     if (!review) return res.status(404).json({ message: 'Review not found' })
     res.json({ data: review })
   },
@@ -67,7 +67,7 @@ export const reviewController = {
   },
 
   async remove(req: Request, res: Response) {
-    const ok = await reviewService.remove(Number(req.params.id))
+    const ok = await reviewService.remove(req.params.id)
     if (!ok) return res.status(404).json({ message: 'Review not found' })
     res.status(204).send()
   },
