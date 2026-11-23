@@ -1,4 +1,5 @@
 CREATE TYPE "public"."booking_status" AS ENUM('pending', 'paid', 'cancelled');--> statement-breakpoint
+CREATE TYPE "public"."rental_status" AS ENUM('pending', 'paid', 'en_route', 'completed', 'cancelled');--> statement-breakpoint
 CREATE TYPE "public"."departure_status" AS ENUM('open', 'closed', 'cancelled');--> statement-breakpoint
 CREATE TABLE "bookings" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
@@ -37,11 +38,38 @@ CREATE TABLE "faqs" (
 	"active" boolean DEFAULT true NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE "posts" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"title" varchar(200) NOT NULL,
+	"excerpt" text,
+	"category" varchar(100),
+	"cover_image" text,
+	"content" text,
+	"published" boolean DEFAULT true NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE "protocols" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"tour_id" uuid NOT NULL,
 	"title" varchar(200) NOT NULL,
 	"description" text
+);
+--> statement-breakpoint
+CREATE TABLE "rentals" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"date" date NOT NULL,
+	"time" time NOT NULL,
+	"status" "rental_status" DEFAULT 'pending' NOT NULL,
+	"customer_name" varchar(200) NOT NULL,
+	"flight_info" varchar(255),
+	"pickup_place" varchar(255) NOT NULL,
+	"destination" varchar(255) NOT NULL,
+	"driver_name" varchar(120),
+	"vehicle" varchar(120),
+	"notes" text,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "review_answers" (

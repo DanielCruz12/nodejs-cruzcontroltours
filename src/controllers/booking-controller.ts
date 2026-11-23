@@ -14,6 +14,20 @@ export const bookingController = {
     res.json({ data: booking })
   },
 
+  async create(req: Request, res: Response) {
+    try {
+      const booking = await bookingService.create(req.body)
+      res.status(201).json({ data: booking })
+    } catch (error) {
+      const status = (error as { status?: number }).status ?? 500
+      const message =
+        error instanceof Error && error.message
+          ? error.message
+          : 'Unexpected error'
+      res.status(status).json({ message })
+    }
+  },
+
   async update(req: Request, res: Response) {
     const booking = await bookingService.update(
       req.params.id,

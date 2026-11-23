@@ -39,6 +39,8 @@ const { protocolSchema } = loadProject(path.join(ROOT, "src/routes/v1/protocol-r
 const { categorySchema } = loadProject(path.join(ROOT, "src/routes/v1/category-routes"));
 const { departureSchema } = loadProject(path.join(ROOT, "src/routes/v1/departure-routes"));
 const { faqSchema } = loadProject(path.join(ROOT, "src/routes/v1/faq-routes"));
+const { bookingCreateSchema } = loadProject(path.join(ROOT, "src/routes/v1/booking-routes"));
+const { rentalSchema } = loadProject(path.join(ROOT, "src/routes/v1/rental-routes"));
 const { coversCriteria } = loadProject(path.join(ROOT, "src/controllers/review-controller"));
 
 let pass = 0, fail = 0;
@@ -85,6 +87,19 @@ check("D6 null override passes", departureSchema.safeParse({ ...goodDep, priceOv
 
 check("F1 valid faq", faqSchema.safeParse({ question: "Q?", answer: "A." }).success);
 check("F2 empty question fails", !faqSchema.safeParse({ question: " ", answer: "A." }).success);
+
+const goodBooking = { tourId: UUID_1, userId: "cli_123", guests: 2, totalPrice: "120.00" };
+check("B1 valid booking", bookingCreateSchema.safeParse(goodBooking).success);
+check("B2 missing tourId fails", !bookingCreateSchema.safeParse({ userId: "x", guests: 1, totalPrice: "10" }).success);
+check("B3 non-uuid tourId fails", !bookingCreateSchema.safeParse({ ...goodBooking, tourId: "1" }).success);
+check("B4 guests 0 fails", !bookingCreateSchema.safeParse({ ...goodBooking, guests: 0 }).success);
+
+const goodRental = { date: "2026-12-01", time: "14:30", customerName: "Ana", pickupPlace: "Aeropuerto", destination: "Hotel" };
+check("N1 valid rental", rentalSchema.safeParse(goodRental).success);
+check("N2 missing customer fails", !rentalSchema.safeParse({ date: "2026-12-01", time: "14:30", pickupPlace: "A", destination: "B" }).success);
+check("N3 bad date fails", !rentalSchema.safeParse({ ...goodRental, date: "12/01/2026" }).success);
+check("N4 bad time fails", !rentalSchema.safeParse({ ...goodRental, time: "25:00" }).success);
+check("N5 bad status fails", !rentalSchema.safeParse({ ...goodRental, status: "lost" }).success);
 
 check("P1 valid protocol", protocolSchema.safeParse({ tourId: UUID_2, title: "Safety" }).success);
 check("P2 missing tourId fails", !protocolSchema.safeParse({ title: "Safety" }).success);

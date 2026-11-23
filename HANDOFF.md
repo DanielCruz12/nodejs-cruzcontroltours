@@ -3,7 +3,7 @@
 Contexto acumulado del proyecto para continuar el trabajo sin volver a preguntar.
 **Actualiza este archivo al terminar cada sesión.**
 
-Última actualización: 2026-11-19
+Última actualización: 2026-11-23
 
 ## Stack
 
@@ -83,6 +83,24 @@ npm run dz:push / dz:studio  # push directo / UI de la DB
 - Completar el documento Swagger (hoy solo lista GET/POST de tours y customers).
 
 ## Historial de sesiones
+
+### 2026-11-23 — tabla y endpoints de posts (blog)
+
+1. Nuevo `schemas/posts.ts` (`id, title, excerpt?, category?, coverImage?, content?, published=true, createdAt`) + barrel; `services/post-service.ts` (list ordenado por `createdAt` DESC), `controllers/post-controller.ts` y `routes/v1/post-routes.ts` (`GET /posts` y `GET /posts/:id` públicos; POST/PUT/DELETE solo admin/superadmin; `postSchema` exportado: title 1–200, excerpt ≤500, category ≤100, coverImage ≤2000, content ≤100000). Router registrado en `routes/v1/index.ts`.
+2. Nuevo `routes/v1/post-routes.test.ts` (6 casos del schema, estilo `review-form-routes.test.ts`).
+3. Migración generada y REVERTIDA (`drizzle/0001_add-posts.sql` + snapshot + entrada del journal eliminados): el usuario hace las migraciones (`dz:gen` + `dz:mig` o `dz:push` pendientes).
+4. El asistente corrió jest (24/24, 3 suites, con `--cacheDirectory` local por EPERM en %TEMP% del sandbox) y `tsc --noEmit` (limpio). NOTA: el usuario corre lint/build/tsc/migraciones/tests (no volver a correrlos).
+
+### 2026-11-22 (3) — módulo rentals (despachos)
+
+1. Tabla `rentals` (uuid, date, time, enum `rental_status`: pending/paid/en_route/completed/cancelled default pending, customerName!, flightInfo?, pickupPlace!, destination!, driverName?, vehicle?, notes?, createdAt, updatedAt con `$onUpdate`). Rutas `GET/GET:id/POST/PUT /rentals` (sin DELETE) con `authenticate` + `authorize('superadmin','host')`; zod `rentalSchema` (fecha YYYY-MM-DD, hora HH:MM[:SS]).
+2. `backend-verify.tmp.cjs`: checks N1–N5 (37/37 PASS). Migración generada `drizzle/0001_stiff_callisto.sql` (solo CREATE rentals; la aplica el usuario).
+
+### 2026-11-22 (2) — POST /bookings para carga manual
+
+1. Nuevo `POST /bookings` (`bookingCreateSchema` exportado: tourId uuid, departureId uuid nullish, userId string, guests int≥1, totalPrice, status opcional; `totalPriceField` compartido con el schema de update). Servicio `create` con 404 si el tour/salida no existen; controlador con manejo de `status`.
+2. Auth: solo `canCreate` (superadmin/admin/host autenticados); GETs siguen públicos, PUT/DELETE siguen admin/superadmin.
+3. `backend-verify.tmp.cjs`: checks B1–B4 (32/32 PASS).
 
 ### 2026-11-22 — migración de ids a UUID (todas las tablas)
 

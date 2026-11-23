@@ -5,7 +5,9 @@ import categoryRouter from './category-routes'
 import customerRouter from './customer-routes'
 import departureRouter from './departure-routes'
 import faqRouter from './faq-routes'
+import postRouter from './post-routes'
 import protocolRouter from './protocol-routes'
+import rentalRouter from './rental-routes'
 import reviewFormRouter from './review-form-routes'
 import reviewRouter from './review-routes'
 import roleRouter from './role-routes'
@@ -21,7 +23,9 @@ apiRoutes.use(categoryRouter)
 apiRoutes.use(customerRouter)
 apiRoutes.use(departureRouter)
 apiRoutes.use(faqRouter)
+apiRoutes.use(postRouter)
 apiRoutes.use(protocolRouter)
+apiRoutes.use(rentalRouter)
 apiRoutes.use(reviewFormRouter)
 apiRoutes.use(reviewRouter)
 apiRoutes.use(roleRouter)
