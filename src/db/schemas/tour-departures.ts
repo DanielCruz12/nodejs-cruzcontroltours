@@ -6,6 +6,7 @@ import {
   numeric,
   pgEnum,
   pgTable,
+  time,
   uuid,
 } from 'drizzle-orm/pg-core'
 import { tours } from './tours'
@@ -25,6 +26,7 @@ export const tourDepartures = pgTable(
       .references(() => tours.id, { onDelete: 'cascade' }),
     startDate: date('start_date').notNull(),
     endDate: date('end_date').notNull(),
+    startTime: time('start_time'),
     capacity: integer('capacity').notNull(),
     priceOverride: numeric('price_override', { precision: 10, scale: 2 }),
     status: departureStatus('status').notNull().default('open'),

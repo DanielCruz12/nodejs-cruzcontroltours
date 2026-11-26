@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import http from 'http'
 import app from './app'
-import { pool } from './db'
+import { pool } from './db/db'
 import { initSocket } from './socket'
 
 const port = process.env.PORT || 3002

@@ -3,8 +3,12 @@ import { departureService } from '../services/departure-service'
 import { tourService } from '../services/tour-service'
 
 export const departureController = {
-  async list(_req: Request, res: Response) {
-    const data = await departureService.list()
+  async list(req: Request, res: Response) {
+    const tourId =
+      typeof req.query.tourId === 'string' && req.query.tourId.length > 0
+        ? req.query.tourId
+        : undefined
+    const data = await departureService.list({ tourId })
     res.json({ data })
   },
 

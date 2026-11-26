@@ -1,13 +1,19 @@
 import { eq } from 'drizzle-orm'
-import { db } from '../db'
+import { db } from '../db/db'
 import {
   NewTourDeparture,
   TourDeparture,
   tourDepartures,
-} from '../db/schema'
+} from '../db/schemas'
 
 export const departureService = {
-  async list(): Promise<TourDeparture[]> {
+  async list(filter?: { tourId?: string }): Promise<TourDeparture[]> {
+    if (filter?.tourId) {
+      return db
+        .select()
+        .from(tourDepartures)
+        .where(eq(tourDepartures.tourId, filter.tourId))
+    }
     return db.select().from(tourDepartures)
   },
 

@@ -1,12 +1,12 @@
 import { eq } from 'drizzle-orm'
-import { db } from '../db'
+import { db } from '../db/db'
 import {
   Booking,
   bookings,
   NewBooking,
   tourDepartures,
   tours,
-} from '../db/schema'
+} from '../db/schemas'
 
 function fail(status: number, message: string): never {
   throw Object.assign(new Error(message), { status })

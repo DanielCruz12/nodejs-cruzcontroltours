@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm'
-import { db } from '../db'
-import { NewReview, Review, reviews } from '../db/schema'
+import { db } from '../db/db'
+import { NewReview, Review, reviews } from '../db/schemas'
 
 export const reviewService = {
   async list(): Promise<Review[]> {

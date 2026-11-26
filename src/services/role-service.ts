@@ -1,5 +1,5 @@
-import { db } from '../db'
-import { Role, roles } from '../db/schema'
+import { db } from '../db/db'
+import { Role, roles } from '../db/schemas'
 
 export const roleService = {
   async list(): Promise<Role[]> {

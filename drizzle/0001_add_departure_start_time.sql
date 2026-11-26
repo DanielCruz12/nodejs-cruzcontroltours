@@ -1,0 +1,1 @@
+ALTER TABLE "tour_departures" ADD COLUMN "start_time" time;

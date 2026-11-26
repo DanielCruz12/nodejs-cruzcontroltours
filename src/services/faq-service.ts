@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm'
-import { db } from '../db'
-import { Faq, faqs, NewFaq } from '../db/schema'
+import { db } from '../db/db'
+import { Faq, faqs, NewFaq } from '../db/schemas'
 
 export const faqService = {
   async list(): Promise<Faq[]> {

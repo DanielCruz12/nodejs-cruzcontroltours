@@ -1,8 +1,8 @@
 import 'dotenv/config'
 import bcrypt from 'bcrypt'
 import { eq } from 'drizzle-orm'
-import { db, pool } from './index'
-import { roles, users } from './schema'
+import { db, pool } from './db'
+import { roles, users } from './schemas'
 
 // Correos fijos; las claves se toman de SEED_*_PASSWORD o estos defaults.
 // Cámbialas con variables de entorno en producción.

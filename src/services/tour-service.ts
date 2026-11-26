@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm'
-import { db } from '../db'
-import { NewTour, Tour, tours } from '../db/schema'
+import { db } from '../db/db'
+import { NewTour, Tour, tours } from '../db/schemas'
 
 export const tourService = {
   async list(): Promise<Tour[]> {

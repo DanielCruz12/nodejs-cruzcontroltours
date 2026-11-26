@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt'
 import { and, eq, ne } from 'drizzle-orm'
-import { db } from '../db'
-import { roles, users } from '../db/schema'
+import { db } from '../db/db'
+import { roles, users } from '../db/schemas'
 import type { RoleName } from '../middlewares/auth'
 import type { PublicUser } from './auth-service'
 

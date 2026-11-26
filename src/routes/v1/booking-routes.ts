@@ -38,6 +38,7 @@ const bookingUpdateSchema = z.object({
   guests: z.coerce.number().int().min(1).optional(),
   totalPrice: totalPriceField.optional(),
   status: z.enum(['pending', 'paid', 'cancelled']).optional(),
+  departureId: z.string().uuid().nullish(),
 })
 
 // Crear: cualquier rol del panel (host incluido) puede cargar reservas manuales.

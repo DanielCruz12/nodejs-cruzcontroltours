@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm'
-import { db } from '../db'
-import { NewProtocol, Protocol, protocols } from '../db/schema'
+import { db } from '../db/db'
+import { NewProtocol, Protocol, protocols } from '../db/schemas'
 
 export const protocolService = {
   async list(): Promise<Protocol[]> {

@@ -1,6 +1,6 @@
 import { desc, eq } from 'drizzle-orm'
-import { db } from '../db'
-import { NewPost, Post, posts } from '../db/schema'
+import { db } from '../db/db'
+import { NewPost, Post, posts } from '../db/schemas'
 
 export const postService = {
   async list(): Promise<Post[]> {

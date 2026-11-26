@@ -21,6 +21,14 @@ const dateString = z
   .regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be YYYY-MM-DD')
   .refine((value) => !Number.isNaN(Date.parse(value)), 'Invalid date')
 
+const timeString = z
+  .string()
+  .trim()
+  .regex(
+    /^([01]\d|2[0-3]):[0-5]\d(:[0-5]\d)?$/,
+    'Time must be HH:MM or HH:MM:SS',
+  )
+
 const priceOverride = z
   .union([
     z.number().positive('Price must be positive'),
@@ -36,6 +44,7 @@ const departureObject = z.object({
   tourId: z.string().uuid(),
   startDate: dateString,
   endDate: dateString,
+  startTime: timeString.nullish(),
   capacity: z.coerce.number().int().min(1),
   priceOverride,
   status: z.enum(['open', 'closed', 'cancelled']).optional(),

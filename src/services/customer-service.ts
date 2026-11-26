@@ -1,6 +1,6 @@
 import { desc, eq } from 'drizzle-orm'
-import { db } from '../db'
-import { Customer, customers, NewCustomer } from '../db/schema'
+import { db } from '../db/db'
+import { Customer, customers, NewCustomer } from '../db/schemas'
 
 export const customerService = {
   async list(): Promise<Customer[]> {

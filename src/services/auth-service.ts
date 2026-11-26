@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt'
 import { eq } from 'drizzle-orm'
 import jwt from 'jsonwebtoken'
-import { db } from '../db'
-import { roles, users } from '../db/schema'
+import { db } from '../db/db'
+import { roles, users } from '../db/schemas'
 import type { AuthPayload, RoleName } from '../middlewares/auth'
 
 export type PublicUser = {

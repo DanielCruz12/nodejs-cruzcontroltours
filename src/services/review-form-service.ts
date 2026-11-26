@@ -1,6 +1,6 @@
 import { randomBytes } from 'node:crypto'
 import { and, count, eq, inArray, sql } from 'drizzle-orm'
-import { db } from '../db'
+import { db } from '../db/db'
 import {
   reviewAnswers,
   reviewForms,
@@ -8,7 +8,7 @@ import {
   reviewResponses,
   tours,
   type ReviewQuestion,
-} from '../db/schema'
+} from '../db/schemas'
 
 export type QuestionType = 'stars' | 'text'
 

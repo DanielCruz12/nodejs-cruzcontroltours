@@ -6,7 +6,7 @@ import rateLimit from 'express-rate-limit'
 import helmet from 'helmet'
 import hpp from 'hpp'
 import path from 'path'
-import { pool } from './db'
+import { pool } from './db/db'
 import { apiRoutes } from './routes/v1'
 import { setupSwagger } from './swagger'
 

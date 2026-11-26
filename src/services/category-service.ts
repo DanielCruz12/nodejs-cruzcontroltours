@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm'
-import { db } from '../db'
-import { categories, Category, NewCategory } from '../db/schema'
+import { db } from '../db/db'
+import { categories, Category, NewCategory } from '../db/schemas'
 
 export const categoryService = {
   async list(): Promise<Category[]> {

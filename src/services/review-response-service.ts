@@ -1,12 +1,12 @@
 import { and, count, desc, eq, inArray, sql } from 'drizzle-orm'
-import { db } from '../db'
+import { db } from '../db/db'
 import {
   reviewAnswers,
   reviewForms,
   reviewQuestions,
   reviewResponses,
   tours,
-} from '../db/schema'
+} from '../db/schemas'
 
 export type SubmitAnswerInput = {
   questionId: string

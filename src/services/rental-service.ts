@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm'
-import { db } from '../db'
-import { NewRental, Rental, rentals } from '../db/schema'
+import { db } from '../db/db'
+import { NewRental, Rental, rentals } from '../db/schemas'
 
 export const rentalService = {
   async list(): Promise<Rental[]> {
