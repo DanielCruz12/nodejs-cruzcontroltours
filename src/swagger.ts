@@ -25,7 +25,8 @@ const swaggerDocument = {
         responses: { '200': { description: 'Lista de clientes' } },
       },
       post: {
-        summary: 'Guardar contacto (nombre, teléfono y correo requeridos)',
+        summary:
+          'Guardar contacto (nombre, teléfono y correo requeridos; teléfono secundario y fecha de nacimiento opcionales)',
         responses: { '201': { description: 'Contacto guardado' } },
       },
     },

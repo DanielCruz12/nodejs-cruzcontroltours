@@ -15,6 +15,13 @@
       "when": 1795718053017,
       "tag": "0001_add_departure_start_time",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1795804289636,
+      "tag": "0002_overconfident_excalibur",
+      "breakpoints": true
     }
   ]
 }
